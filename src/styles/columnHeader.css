@@ -1,0 +1,22 @@
+.columnHeader {
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: 1fr 60% 1fr;
+  align-items: center;
+
+  border-bottom: 3px solid black;
+  height: 50px;
+  font-size: 2rem;
+}
+.addTaskButton {
+  font-family: inherit;
+  font-size: 30px;
+  width: auto;
+  grid-column: 3/-1;
+  margin-right: 4px;
+}
+.collumnName {
+  grid-column: 2/3;
+  display: flex;
+  justify-content: center;
+}

@@ -1,0 +1,18 @@
+.columnsContainer {
+  margin: 0px;
+  padding: 0px;
+}
+
+.columnsContainer ul {
+  margin-top: 30px;
+  margin-left: 60px;
+  margin-right: 60px;
+  padding: 0px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  list-style-type: none;
+  height: 100vh;
+}
+.columnContainer {
+  border: 1px solid black;
+}

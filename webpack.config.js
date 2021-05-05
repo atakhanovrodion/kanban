@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
@@ -13,8 +15,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx|js)/,
+        test: /\.(ts|tsx|js)$/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
