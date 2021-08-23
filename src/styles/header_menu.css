@@ -1,0 +1,44 @@
+.header_menu {
+  position: absolute;
+  margin: 3px;
+  padding: 0;
+  top: 32px;
+  left: 10px;
+  margin-top: 2px;
+  list-style: none;
+  z-index: 5;
+  background: white;
+  border: 0;
+  width: 200px;
+  box-shadow: 5px 5px 5px lightgray, -5px 5px 5px lightgray;
+}
+.menu_board_button {
+  background-color: white;
+  border: 1px solid rgba(128, 128, 128, 0.445);
+  height: fit-content;
+  width: 100%;
+  font-size: 1rem;
+  text-align: start;
+  padding: 0.5rem;
+
+  cursor: pointer;
+}
+.menu_board_button:hover {
+  background-color: rgb(212, 245, 212);
+}
+.menu_create_button {
+  margin: 5px;
+  height: 25px;
+  width: 190px;
+  border: 0;
+  border-radius: 5px;
+  background-color: rgba(50, 205, 50, 0.884);
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.menu_create_button:hover {
+  background-color: limegreen;
+}

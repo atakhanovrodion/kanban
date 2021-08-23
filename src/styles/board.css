@@ -1,0 +1,24 @@
+.board {
+  display: grid;
+  grid-template-columns: 15px 1fr 15px;
+  grid-template-rows: 40px 1fr;
+  grid-row: 2/3;
+  height: 100%;
+}
+
+.columns_container {
+  padding: 0;
+  margin: 0;
+  grid-column: 2/3;
+  grid-row: 2/-1;
+  height: 100%;
+}
+.columns_container ul {
+  padding: 0;
+  margin: 0;
+  grid-row: 2/3;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  list-style-type: none;
+  height: 100%;
+}

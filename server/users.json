@@ -1,0 +1,35 @@
+{
+  "nextId": 7,
+  "users": {
+    "admin@admin.admin": {
+      "id": 0,
+      "hash": "3cbd312efdb1428ac169d1327f88c169bbc9a1f3baf6c797f2",
+      "boards": ["0", "1"]
+    },
+    "test@test.test": {
+      "id": 1,
+      "hash": "306e50e995e33167e608cba33dc4b52e8bb9206ebc248f5131",
+      "boards": ["0", "1", "2"]
+    },
+    "admin@admin.test": {
+      "id": 2,
+      "hash": "3cbd312efdb1428ac169d1327f88c169bbc9a1f3baf6c797f2",
+      "boards": []
+    },
+    "SS@kekwait.com": {
+      "id": 3,
+      "hash": "75426407ad9bc323bd783cc360a0d59423f24208ff477ff2f6",
+      "boards": ["0", "1"]
+    },
+    "admin1@admin.admin": {
+      "id": 5,
+      "hash": "3b214eece1fb357007949d86e7354ad5b2b528a4397e489a35",
+      "boards": []
+    },
+    "new": {
+      "id": 6,
+      "hash": "c1e0a8a17a462d52e35fa34ac09b920dea0c7386d8b5f28998",
+      "boards": []
+    }
+  }
+}

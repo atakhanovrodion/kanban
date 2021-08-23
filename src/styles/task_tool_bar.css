@@ -1,0 +1,23 @@
+.task_tool_bar {
+  display: flex;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+.task_tool_bar_button {
+  border: 0;
+  background: inherit;
+  color: grey;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.4rem;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 5px;
+  line-height: 3;
+  width: fit-content;
+}
+.task_tool_bar button:hover {
+  background: inherit;
+  opacity: 0.5;
+}

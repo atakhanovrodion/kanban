@@ -1,0 +1,51 @@
+.add_member_window {
+  position: absolute;
+  top: 185px;
+  left: 460px;
+  border: 0;
+  background-color: white;
+  box-shadow: 0px 0px 5px 5px rgba(128, 128, 128, 0.3);
+  display: grid;
+  grid-template-rows: 25px 25px 1fr;
+}
+.add_member_window_title {
+  grid-row: 1/2;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 20px 1fr 20px;
+  background-color: rgb(168, 168, 168, 0.2);
+}
+.add_member_window_title span {
+  grid-column: 2/3;
+  justify-self: center;
+  line-height: 2;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.add_member_window_close {
+  width: fit-content;
+  line-height: 1.5;
+  border-radius: 50%;
+  grid-column: 3/4;
+  border: 0;
+}
+.add_member_window_textarea {
+  padding: 0.2rem;
+  outline: 0;
+  border: 0;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+}
+.add_member_window_checkbox {
+  width: 100%;
+  background-color: inherit;
+  border: none;
+  border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 0.1rem;
+}
+.add_member_window_checkbox:hover {
+  background-color: inherit;
+}

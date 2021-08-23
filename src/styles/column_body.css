@@ -1,3 +1,9 @@
 .column_body {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: white;
+}
+.columnContainer {
+  border: 1px solid #6464643f;
 }

@@ -1,0 +1,48 @@
+.column_header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 2px solid #6464643f;
+  height: 50px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.add_task_button {
+  width: 40px;
+  height: 40px;
+  grid-column: 3/-1;
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 5px;
+}
+
+.collumn_name {
+  grid-column: 2/3;
+  cursor: pointer;
+  width: fit-content;
+  justify-self: center;
+}
+.decoy {
+  width: 40px;
+}
+.column_header .member_icon {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  fill: none;
+}
+.column_header .member_icon_add {
+  fill: green;
+}
+.column_header .member_icon:hover {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  fill: var(--main-bg-color);
+}

@@ -1,0 +1,22 @@
+.filter_icon_button {
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0px;
+  grid-column: 3/-1;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.filter_icon_button:hover {
+  background: darkgray;
+}
+.filter_active {
+  background: rgba(0, 128, 0, 0.486);
+
+  fill: white;
+}
+.filter_icon {
+  width: 20px;
+  height: 20px;
+}

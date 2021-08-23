@@ -1,0 +1,8 @@
+.create_new_board {
+  position: absolute;
+  width: 600px;
+  height: 400px;
+  background: white;
+  justify-self: center;
+  align-self: center;
+}

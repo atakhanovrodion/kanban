@@ -1,0 +1,8 @@
+.edit_task_page {
+  border: 0;
+
+  width: 400px;
+  height: 350px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.205);
+}

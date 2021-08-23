@@ -1,0 +1,38 @@
+.login {
+  position: absolute;
+  justify-self: center;
+  align-self: center;
+  width: 400px;
+  height: 400px;
+  background: white;
+}
+.login form {
+  display: flex;
+  flex-direction: column;
+}
+.login_input {
+  font-size: 1.1em;
+  margin: 12px;
+  padding: 10px;
+}
+.login_text {
+  font-size: 1.6em;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+.login_button {
+  width: 80%;
+  align-self: center;
+  font-size: 1.1em;
+  margin-top: 30px;
+}
+.login_bottom {
+  margin-top: 15px;
+  text-align: center;
+}
+.login_bottom_ref {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+}

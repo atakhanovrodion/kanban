@@ -1,28 +1,14 @@
+@import './colors.css';
 body {
-  margin: 0px;
+  margin: 0;
+  font-family: Helvetica;
+  user-select: none;
+  height: 100vh;
 }
 
 .app {
   display: grid;
-  grid-template-rows: 50px 1fr;
+  grid-template-rows: 34px 1fr;
   grid-gap: 7px;
-}
-
-.columnsContainer {
-  margin: 0px;
-  padding: 0px;
-}
-
-.columnsContainer ul {
-  margin-top: 30px;
-  margin-left: 60px;
-  margin-right: 60px;
-  padding: 0px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  list-style-type: none;
-  height: 100vh;
-}
-.columnContainer {
-  border: 1px solid black;
+  background-color: var(--main-bg-color);
 }

@@ -1,10 +1,28 @@
 .task {
-  width: 95%;
-
-  height: 50px;
+  width: 96%;
   border: 1px solid black;
-  margin: 5px;
-  display: flex;
-  justify-content: center;
-  font-size: 1.2rem;
+  margin-top: 7px;
+  align-self: center;
+  font-size: 1rem;
+  cursor: pointer;
+  word-wrap: break-word;
+  border-radius: 0.3rem;
+  padding: 0.4rem;
+  line-break: auto;
+  text-align: start;
+}
+.task_text {
+  display: inline;
+  line-height: 1.5;
+}
+
+.task .member_icon_text {
+  fill: green;
+}
+.task_icon_wrapper {
+  display: inline-flex;
+  border-color: inherit;
+  float: right;
+  gap: 4px;
+  background: inherit;
 }

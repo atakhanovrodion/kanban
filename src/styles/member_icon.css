@@ -1,0 +1,25 @@
+.member_icon_button {
+  margin: 0;
+  padding: 0;
+  border: 1px solid;
+  border-color: inherit;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+.member_icon {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  width: inherit;
+  height: inherit;
+}
+
+.member_icon_text {
+  font-family: Helvetica;
+  font-size: 100px;
+  font-weight: 550;
+  fill: var(--light-bg-color);
+}

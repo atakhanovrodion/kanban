@@ -1,46 +1,50 @@
 import React, { useState } from 'react';
+
+import HeaderMenu from './HeaderMenu';
+import MemberIcon from './MemberIcon';
+import Wrapper from './Wrapper';
+
 import '../styles/app_header.css';
-import logo from '../images/menu_icon.svg';
+
+import icon from '../images/menu_icon.svg';
 
 type AppHeaderProps = {
   user: string;
   boards: string[];
+  changeCurrentBoard: (boardName: string) => void;
+  appStateHandler: (state: string) => void;
 };
 
-const AppHeader = ({ user, boards }: AppHeaderProps): JSX.Element => {
+const AppHeader = ({
+  user,
+  boards,
+  changeCurrentBoard,
+  appStateHandler,
+}: AppHeaderProps): JSX.Element => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const menuStateHandler = () => {
+    setMenuOpen((prevState) => !prevState);
+  };
 
-  const itemList = boards.map((item) => (
-    <li>
-      <button type="button" key={item}>
-        {item}
-      </button>
-    </li>
-  ));
   const menuElement = isMenuOpen && (
-    <ul className="menu_list">
-      {itemList}
-      <button type="button">create new</button>
-    </ul>
+    <Wrapper stateHandler={menuStateHandler} className="wrapper">
+      <HeaderMenu
+        boards={boards}
+        changeCurrentBoard={changeCurrentBoard}
+        appStateHandler={appStateHandler}
+      />
+    </Wrapper>
   );
   return (
     <header className="app_header">
-      <div className="menu">
-        <button
-          className="menu_button"
-          type="button"
-          onClick={() => {
-            setMenuOpen(!isMenuOpen);
-          }}
-        >
-          <img src={logo} alt="kekw" width="40px" height="40px" />
-        </button>
+      <button className="menu_button" type="button" onClick={menuStateHandler}>
+        <img src={icon} alt="kekw" width="20px" height="20px" />
         <span>Boards</span>
-      </div>
+      </button>
       {menuElement}
-
+      <span className="header_title">KANBAN</span>
       <button className="user_settings_button" type="button">
-        {user}
+        <MemberIcon name={user} />
       </button>
     </header>
   );

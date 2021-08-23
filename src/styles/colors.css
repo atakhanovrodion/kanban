@@ -1,0 +1,9 @@
+:root {
+  --yellow: rgb(250, 250, 178);
+  --green: rgb(175, 240, 175);
+  --blue: rgb(203, 203, 255);
+  --red: rgb(252, 191, 191);
+  --main-bg-color: rgb(168, 168, 168, 0.2);
+  --dark-bg-color: #313030;
+  --light-bg-color: #535353;
+}

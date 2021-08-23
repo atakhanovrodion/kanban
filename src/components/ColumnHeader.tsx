@@ -1,25 +1,27 @@
 import React from 'react';
-import '../styles/columnHeader.css';
+import '../styles/column_header.css';
+import PlusIcon from './PlusIcon';
 
 type ColumnHeaderProps = {
   columnName: string;
-  showAddTaskWindow: (columnName?: string) => void;
+  showAddTaskWindow: (columnName: string) => void;
 };
 
 const ColumnHeader = ({
   columnName,
   showAddTaskWindow,
 }: ColumnHeaderProps): JSX.Element => (
-  <div className="columnHeader">
-    <span className="collumnName">{columnName}</span>
+  <div className="column_header">
+    <div className="decoy"> </div>
+    <span className="collumn_name">{columnName}</span>
     <button
       type="button"
-      className="addTaskButton"
+      className="add_task_button"
       onClick={() => {
         showAddTaskWindow(columnName);
       }}
     >
-      +
+      <PlusIcon />
     </button>
   </div>
 );
