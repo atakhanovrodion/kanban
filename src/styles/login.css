@@ -5,6 +5,8 @@
   width: 400px;
   height: 400px;
   background: white;
+  display: flex;
+  flex-flow: column;
 }
 .login form {
   display: flex;

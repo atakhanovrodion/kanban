@@ -1,5 +1,5 @@
 {
-  "nextId": 7,
+  "nextId": 8,
   "users": {
     "admin@admin.admin": {
       "id": 0,
@@ -29,6 +29,11 @@
     "new": {
       "id": 6,
       "hash": "c1e0a8a17a462d52e35fa34ac09b920dea0c7386d8b5f28998",
+      "boards": []
+    },
+    "SS": {
+      "id": 7,
+      "hash": "fa874e7fa64a7a0ed084cccd4fd8e616a6635729a122100ff9",
       "boards": []
     }
   }

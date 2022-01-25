@@ -1,24 +1,16 @@
 import express from 'express';
 import { readFile, writeFile } from 'fs/promises';
+import mongoose from 'mongoose';
 import cors from 'cors';
 import { json } from 'body-parser';
 import session from 'express-session';
 import path from 'path';
-import { IUser, addUser, authenticate, IBoard, IBoards, addBoard } from './db';
+// import { IUser, addUser, authenticate, IBoard, IBoards, addBoard } from './db';
+import routes from './routes';
 
-const app = express();
 const port = 3000;
 
-app.use(json());
-app.use(cors());
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: false,
-    secret: 'kekw',
-  })
-);
-
+/*
 app.get('/auth', async (req, res) => {
   console.log('GET /AUTH ');
   const data = await readFile(path.join(__dirname, '..', 'users.json'));
@@ -79,9 +71,23 @@ app.post('/registration', async (req, res) => {
 app.post('/board', async (req, res) => {
   console.log('POST board');
   console.log(req.body);
-  res.send('ok');
+  res.send('okk');
 });
+*/
 
-app.listen(port, () => {
-  console.log(`app is listening on ${port}`);
+mongoose.connect('mongodb://localhost:27017/kanban').then(() => {
+  const app = express();
+  app.use(json());
+  app.use(cors());
+  app.use(
+    session({
+      resave: false,
+      saveUninitialized: false,
+      secret: 'kekw',
+    })
+  );
+  app.use('/', routes);
+  app.listen(port, () => {
+    console.log(`app is listening on ${port}`);
+  });
 });
