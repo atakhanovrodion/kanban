@@ -2,6 +2,8 @@ import { pbkdf2Sync } from 'crypto';
 
 import { verify, sign } from 'jsonwebtoken';
 import express, { Response } from 'express';
+
+import expressWs from 'express-ws';
 import { Board, IBoard, ITask } from './models/Board';
 import { User, IUser } from './models/User';
 import { verifyToken, IRequest } from './auth';
@@ -88,7 +90,6 @@ router.get('/board/:boardId', verifyToken, async (req: IRequest, res) => {
 		return res.status(404).send('err');
 	}
 });
-
 // Create new board
 
 router.post(
