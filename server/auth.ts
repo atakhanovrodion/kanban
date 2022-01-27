@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 interface IRequest extends Request {
 	user?: any;
+	boardName?: string;
 }
 
 const verifyToken = (

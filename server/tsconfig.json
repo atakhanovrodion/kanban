@@ -1,4 +1,8 @@
 {
+  "ts-node": {
+    "files": true
+  },
+
   "compilerOptions": {
     "lib": ["es2020"],
     "module": "commonjs",
@@ -8,7 +12,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "watch": true
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictNullChecks": null,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "watch": true,
+    "moduleResolution": "node"
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "build"]

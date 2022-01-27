@@ -1,16 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types, Document } from 'mongoose';
 
-interface IBoard {
-	name: string;
-	headers: string[];
-	members: string[];
-	tasks?: { type: ITask[]; default: [] };
+interface IBoard extends Document {
+	boardName: string;
+	headers: Types.Array<string>;
+	members: Types.Array<string>;
+	tasks: Types.DocumentArray<ITask>;
 }
-interface ITask {
+interface ITask extends Document {
 	text: string;
 	header: string;
 	color: string;
-	members: string[];
+	members: Types.Array<string>;
 	labels?: string[];
 	description?: string;
 }
@@ -24,10 +24,10 @@ const taskSchecma = new Schema<ITask>({
 });
 
 const schecma = new Schema<IBoard>({
-	name: String,
+	boardName: { type: String, required: true },
 	headers: [String],
 	members: [String],
-	tasks: [taskSchecma],
+	tasks: { type: [taskSchecma] },
 });
 
 const Board = model('Board', schecma);

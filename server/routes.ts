@@ -107,27 +107,32 @@ router.post(
 					for (let i = 0; i <= user.boards?.length; i += 1) {
 						promises.push(Board.findById(user.boards[i], 'name'));
 					}
+
 					const boards = await Promise.all(promises);
 					boards.forEach((item) => {
 						if (item) {
-							if (item.name === req.body.boardName) {
+							if (item.boardName === req.body.boardName) {
 								isUniue = false;
 							}
 						}
 					});
 				}
 				if (isUniue) {
-					const board = await Board.create<IBoard>({
-						name: req.body.boardName,
-						headers: req.body.headers,
-						members: [user.userName],
-					});
-					// eslint-disable-next-line
-					user.boards?.push(board._id);
+					if ((req.body.boardName, req.body.headers)) {
+						const board = await Board.create({
+							boardName: req.body.boardName,
+							headers: req.body.headers,
+							members: [user.userName],
+							tasks: [],
+						});
+						// eslint-disable-next-line
+						user.boards?.push(board._id);
 
-					await user.save();
-					console.log(board);
-					return res.status(200).json(board);
+						await user.save();
+						console.log(board);
+						return res.status(200).json(board);
+					}
+					return res.status(404).send('bad request');
 				}
 				return res.status(401).send('board with this name already exist');
 			}
