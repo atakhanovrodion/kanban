@@ -1,0 +1,15 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./server/tsconfig.json",
+    "ecmaVersion": "latest"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {}
+}

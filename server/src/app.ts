@@ -6,7 +6,7 @@ import { json } from 'body-parser';
 import 'dotenv/config';
 
 import { WebSocket } from 'ws';
-import { Board, IBoard, ITask, Task } from './models/Board';
+import { Board, Task } from './models/Board';
 import routes from './routes';
 
 import db from './db';
