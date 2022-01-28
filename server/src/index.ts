@@ -1,7 +1,9 @@
 import app from './app';
+import db from './db';
 
 const { SERVER_PORT } = process.env;
-
-app.listen(SERVER_PORT, () => {
-	console.log(`app listening on port ${SERVER_PORT}`);
+db().then(() => {
+	app.listen(SERVER_PORT, async () => {
+		console.log(`app listening on port ${SERVER_PORT}`);
+	});
 });

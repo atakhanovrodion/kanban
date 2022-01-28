@@ -1,6 +1,5 @@
 import { pbkdf2Sync } from 'crypto';
 
-import { sign } from 'jsonwebtoken';
 import express, { Response } from 'express';
 
 import { Board } from './models/Board';
@@ -8,6 +7,7 @@ import { User, IUser } from './models/User';
 import { verifyToken, IRequest } from './middleware/auth';
 
 const router = express.Router();
+const { PASSWORD_SALT } = process.env;
 
 // Registration
 
@@ -19,7 +19,7 @@ router.post('/register', async (req, res): Promise<Response> => {
 		}
 		const hash = pbkdf2Sync(
 			req.body.password,
-			'testsalt',
+			PASSWORD_SALT,
 			5,
 			25,
 			'sha512'
@@ -29,36 +29,6 @@ router.post('/register', async (req, res): Promise<Response> => {
 			hash,
 		});
 		return res.status(200).json(newUser);
-	} catch (err) {
-		console.log(err);
-		return res.status(404);
-	}
-});
-
-// Login
-
-router.post('/login', async (req, res): Promise<Response> => {
-	try {
-		console.log('/post login', req.body);
-		const hash = pbkdf2Sync(
-			req.body.password,
-			'testsalt',
-			5,
-			25,
-			'sha512'
-		).toString('hex');
-		const user = await User.findOne({ userName: req.body.userName, hash });
-		if (user) {
-			const token = sign(
-				// eslint-disable-next-line
-				{ user_id: user._id, userName: user.userName },
-				'secret',
-				{ expiresIn: '1h' }
-			);
-			user.token = token;
-			return res.status(200).json(user);
-		}
-		return res.status(401).json({ error: 'wrong login or password' });
 	} catch (err) {
 		console.log(err);
 		return res.status(404);

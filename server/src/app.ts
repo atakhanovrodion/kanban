@@ -10,10 +10,6 @@ import { Board, Task } from './models/Board';
 import routes from './routes';
 import authRoutes from './routes/auth';
 
-import db from './db';
-
-db();
-
 const { app } = expressWs(express());
 app.use(json());
 app.use(cors());

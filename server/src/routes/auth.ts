@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { User, IUser } from '../models/User';
 import { verifyToken, IRequest } from '../middleware/auth';
 
-const { JWT_SECRET_KEY } = process.env;
+const { JWT_SECRET_KEY, PASSWORD_SALT } = process.env;
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.post('/login', async (req, res): Promise<Response> => {
 	try {
 		const hash = pbkdf2Sync(
 			req.body.password,
-			'testsalt',
+			PASSWORD_SALT,
 			5,
 			25,
 			'sha512'
@@ -52,7 +52,22 @@ router.post('/refresh', async (req, res): Promise<Response> => {
 		await user.save();
 		return res.status(200).json(user);
 	}
-	return res.status(403).send('bad refresh token');
+	return res.status(404).send('invalid refresh token');
 });
+
+router.post(
+	'/logout',
+	verifyToken,
+	async (req: IRequest, res): Promise<Response> => {
+		const user = await User.findById(req.user._Id);
+		if (user) {
+			user.token = undefined;
+			user.refreshToken = undefined;
+			await user.save();
+			return res.status(200).send('logouted');
+		}
+		return res.status(404);
+	}
+);
 
 export default router;
