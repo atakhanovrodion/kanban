@@ -8,6 +8,7 @@ import 'dotenv/config';
 import { WebSocket } from 'ws';
 import { Board, Task } from './models/Board';
 import routes from './routes';
+import authRoutes from './routes/auth';
 
 import db from './db';
 
@@ -28,6 +29,7 @@ app.ws('/board/:boardId', (ws, req) => {
 	}
 });
 app.use('/', routes);
+app.use('/auth/', authRoutes);
 app.post('/board/:boardId', async (req, res) => {
 	try {
 		console.log(req.body);

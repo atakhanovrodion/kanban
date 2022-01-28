@@ -5,13 +5,15 @@ interface IUser {
 	hash: string;
 	boards?: any[];
 	token?: string;
+	refreshToken?: string;
 }
 
 const schecma = new Schema<IUser>({
 	userName: { type: String, required: true },
 	hash: { type: String, required: true },
 	boards: { type: Array, default: [] },
-	token: { type: String },
+	token: String,
+	refreshToken: String,
 });
 
 const User = model('User', schecma);

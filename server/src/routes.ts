@@ -5,7 +5,7 @@ import express, { Response } from 'express';
 
 import { Board } from './models/Board';
 import { User, IUser } from './models/User';
-import { verifyToken, IRequest } from './auth';
+import { verifyToken, IRequest } from './middleware/auth';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post('/register', async (req, res): Promise<Response> => {
 	try {
 		const user = await User.findOne({ userName: req.body.userName });
 		if (user) {
-			return res.status(400).json({ error: 'user already exist' });
+			return res.status(403).json({ error: 'user already exist' });
 		}
 		const hash = pbkdf2Sync(
 			req.body.password,
@@ -28,13 +28,6 @@ router.post('/register', async (req, res): Promise<Response> => {
 			userName: req.body.userName,
 			hash,
 		});
-		const token = sign(
-			// eslint-disable-next-line
-			{ user_id: newUser._id, userName: newUser.userName },
-			'secret',
-			{ expiresIn: '1h' }
-		);
-		newUser.token = token;
 		return res.status(200).json(newUser);
 	} catch (err) {
 		console.log(err);
@@ -137,7 +130,7 @@ router.post(
 	}
 );
 
-router.get('/users', async (req, res) => {
+router.get('/users', verifyToken, async (req, res) => {
 	const users = await User.find();
 
 	res.send(users);
