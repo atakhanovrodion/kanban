@@ -15,13 +15,13 @@ let logoutToken: string;
 let testId: string;
 const testUserName = 'test';
 beforeAll(async () => {
-	await mongoose.connect('mongodb://localhost:27017/test');
+	await mongoose.connect('mongodb://localhost:27017/authtest');
 	const testUser = new User<IUser>({
 		userName: testUserName,
 		hash: testHash,
 	});
 	testId = testUser._id.toString();
-	testToken = issueToken({ userName: testUserName });
+	testToken = issueToken({ userName: testUserName, _Id: testId });
 	const secondUser = new User<IUser>({
 		userName: 'second',
 		hash: testHash,
@@ -32,7 +32,10 @@ beforeAll(async () => {
 		hash: testHash,
 		refreshToken: 'LOGOUT_REFRESH_TOKEN',
 	});
-	logoutToken = issueToken({ userName: 'third', _Id: thirdUser._id });
+	logoutToken = issueToken({
+		userName: 'third',
+		_Id: thirdUser._id.toString(),
+	});
 	thirdUser.token = logoutToken;
 	await testUser.save();
 	await secondUser.save();
@@ -85,7 +88,7 @@ describe('AUTORIZATION', () => {
 		const expiredToken = issueToken(
 			{
 				userName: testUserName,
-				_id: testId,
+				_Id: testId,
 			},
 			{ expiresIn: '1ms' }
 		);

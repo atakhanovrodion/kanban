@@ -1,5 +1,10 @@
 import { sign } from 'jsonwebtoken';
 
 const { JWT_SECRET_KEY } = process.env;
+interface IData {
+	userName: string;
+	_Id: string;
+}
 
-export default (data: any, options = {}) => sign(data, JWT_SECRET_KEY, options);
+export default (data: IData, options = {}) =>
+	sign(data, 'jwtsecretkey', options);

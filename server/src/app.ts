@@ -9,6 +9,8 @@ import { WebSocket } from 'ws';
 import { Board, Task } from './models/Board';
 import routes from './routes';
 import authRoutes from './routes/auth';
+import boardsRoutes from './routes/boards';
+import { verifyToken } from './middleware/auth';
 
 const { app } = expressWs(express());
 app.use(json());
@@ -26,6 +28,8 @@ app.ws('/board/:boardId', (ws, req) => {
 });
 app.use('/', routes);
 app.use('/auth/', authRoutes);
+app.use(verifyToken);
+app.use('/boards/', boardsRoutes);
 app.post('/board/:boardId', async (req, res) => {
 	try {
 		console.log(req.body);
