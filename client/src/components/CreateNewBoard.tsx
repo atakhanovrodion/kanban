@@ -1,6 +1,9 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
+import { addBoard } from '../reducers/board';
+
+import store from '../store';
+
 import '../styles/create_new_board.css';
-import { addBoard, IBoard } from '../api';
 
 type createNewBoardProps = {
 	appStateHandler: (state: string) => void;
@@ -31,9 +34,7 @@ const CreateNewBoard = ({
 						}
 					}
 				}
-				const res = await addBoard(boardName, headers, token);
-				// eslint-disable-next-line
-				boardHandler(res._id, token);
+				store.dispatch(addBoard(boardName, headers));
 			}
 		} catch (err) {
 			console.log(err);

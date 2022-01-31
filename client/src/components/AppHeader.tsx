@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUserName } from '../reducers/appReducer';
 
 import HeaderMenu from './HeaderMenu';
 import MemberIcon from './MemberIcon';
@@ -9,27 +11,20 @@ import '../styles/app_header.css';
 import icon from '../images/menu_icon.svg';
 
 type AppHeaderProps = {
-	user: string;
 	changeCurrentBoard: (boardName: string) => void;
-	appStateHandler: (state: string) => void;
 };
 
-const AppHeader = ({
-	user,
-	changeCurrentBoard,
-	appStateHandler,
-}: AppHeaderProps): JSX.Element => {
+const AppHeader = ({ changeCurrentBoard }: AppHeaderProps): JSX.Element => {
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const menuStateHandler = () => {
 		setMenuOpen((prevState) => !prevState);
 	};
 
+	const userName = useSelector(selectUserName);
+
 	const menuElement = isMenuOpen && (
 		<Wrapper stateHandler={menuStateHandler} className="wrapper">
-			<HeaderMenu
-				changeCurrentBoard={changeCurrentBoard}
-				appStateHandler={appStateHandler}
-			/>
+			<HeaderMenu changeCurrentBoard={changeCurrentBoard} />
 		</Wrapper>
 	);
 	return (
@@ -41,7 +36,7 @@ const AppHeader = ({
 			{menuElement}
 			<span className="header_title">KANBAN</span>
 			<button className="user_settings_button" type="button">
-				<MemberIcon name={user} />
+				<MemberIcon name={userName} />
 			</button>
 		</header>
 	);

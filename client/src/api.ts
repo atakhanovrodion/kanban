@@ -24,9 +24,9 @@ const login = async (
 	userName: string,
 	password: string
 ): Promise<AxiosResponse> => {
-	console.log('login');
+	console.log('/auth/login');
 	const res: AxiosResponse = await axios.post(
-		'/login',
+		'/auth/login',
 		{
 			userName,
 			password,
@@ -36,11 +36,34 @@ const login = async (
 	return res;
 };
 
-const getBoards = async (token: string): Promise<IBoard[]> => {
-	config.headers.authorization = token;
-	const res: AxiosResponse = await axios.get(`/boards/`, config);
+const tryGetBoards = async (token: string): Promise<IBoard[] | any> => {
+	try {
+		config.headers.authorization = token || global.localStorage.token;
+		const res: AxiosResponse = await axios.get(`/boards/`, config);
+		return res.data;
+	} catch (err: any) {
+		if (err.response) {
+			if (err.response.status === 401) {
+				tryRefresh(global.localStorage.refreshToken);
+			}
+		}
+		return err;
+	}
+};
+
+const tryRefresh = async (refreshToken: string) => {
+	const token = refreshToken || global.localStorage.refreshToken;
+
+	const res: AxiosResponse = await axios.post(
+		'/auth/refresh',
+		{
+			refreshToken: token,
+		},
+		config
+	);
 	return res.data;
 };
+
 const setBoard = async (id: number, data: IBoard): Promise<string> => {
 	console.log('here');
 	const res = await axios.post(`/boards/${id}`, data, config);
@@ -51,7 +74,11 @@ const register = async (
 	userName: string,
 	password: string
 ): Promise<AxiosResponse> => {
-	const res = await axios.post('/register', { userName, password }, config);
+	const res = await axios.post(
+		'/auth/register',
+		{ userName, password },
+		config
+	);
 	console.log(res);
 	return res;
 };
@@ -67,24 +94,33 @@ const getBoard = async (boardId: any, token: string): Promise<any> => {
 	}
 };
 
-const addBoard = async (
+const tryAddBoard = async (
 	boardName: string,
 	headers: string[],
 	token: string
 ): Promise<any> => {
 	try {
-		const res = await axios.post(
-			'/board',
-			{ boardName, headers, token },
-			config
-		);
+		config.headers.authorization = token || global.localStorage.token;
+		const res = await axios.post('/boards/add', { boardName, headers }, config);
 
 		return res.data;
-	} catch (err) {
+	} catch (err: any) {
 		console.log(err);
-		return 'test';
+		if (err.response) {
+			if (err.response.status === 401) {
+				tryRefresh(global.localStorage.refreshToken);
+			}
+		}
 	}
 };
 
 export type { ITask, IBoard };
-export { getBoards, login, setBoard, register, addBoard, getBoard };
+export {
+	tryGetBoards,
+	login,
+	setBoard,
+	register,
+	tryAddBoard,
+	getBoard,
+	tryRefresh,
+};

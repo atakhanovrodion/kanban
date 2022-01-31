@@ -1,9 +1,7 @@
-import React, {
-	useState,
-	useEffect,
-	SyntheticEvent,
-	BaseSyntheticEvent,
-} from 'react';
+import { useState, BaseSyntheticEvent } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAppState } from '../reducers/appReducer';
+import { selectBoardName, selectHeaders } from '../reducers/board';
 
 import Column from './Column';
 import simpleHash from '../helper';
@@ -24,13 +22,10 @@ type BoadrdProps = {
 	headers: string[];
 };
 
-const Board = ({
-	memberList,
-	currentBoard,
-	data,
-	appState,
-	headers,
-}: BoadrdProps): JSX.Element => {
+const Board = (): JSX.Element => {
+	const appState = useSelector(selectAppState);
+	const headers = useSelector(selectHeaders);
+
 	const [tasks, setTasks] = useState<ITask[][]>([[], [], [], []]);
 	const [filter, setFilter] = useState(['']);
 	const [currentColumn, setCurrentColumn] = useState('BackLog');
@@ -182,12 +177,7 @@ const Board = ({
 
 	return (
 		<div className="board">
-			<BoardHeader
-				boardName={currentBoard}
-				memberList={memberList}
-				filterOnUser={filterOnUser}
-				filter={filter}
-			/>
+			<BoardHeader filterOnUser={filterOnUser} filter={filter} />
 			<div className="columns_container">
 				<ul>{columnsElement}</ul>
 			</div>

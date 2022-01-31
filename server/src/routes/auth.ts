@@ -9,6 +9,43 @@ const { JWT_SECRET_KEY, PASSWORD_SALT } = process.env;
 
 const router = Router();
 
+router.post('/register', async (req, res): Promise<Response> => {
+	try {
+		if (!(req.body.userName && req.body.password)) {
+			return res.status(404).send('not valid login or password');
+		}
+
+		const user = await User.findOne({ userName: req.body.userName });
+		if (user) {
+			return res.status(403).json({ error: 'user already exist' });
+		}
+		const hash = pbkdf2Sync(
+			req.body.password,
+			PASSWORD_SALT,
+			5,
+			25,
+			'sha512'
+		).toString('hex');
+		const newUser = await User.create<IUser>({
+			userName: req.body.userName,
+			hash,
+		});
+		const token = sign(
+			// eslint-disable-next-line
+			{ _id: newUser._id, userName: newUser.userName },
+			JWT_SECRET_KEY,
+			{ expiresIn: '15m' }
+		);
+		newUser.token = token;
+		newUser.refreshToken = uuid();
+		await newUser.save();
+		return res.status(200).json(newUser);
+	} catch (err) {
+		console.log(err);
+		return res.status(404);
+	}
+});
+
 router.post('/login', async (req, res): Promise<Response> => {
 	try {
 		const hash = pbkdf2Sync(
@@ -22,7 +59,7 @@ router.post('/login', async (req, res): Promise<Response> => {
 		if (user) {
 			const token = sign(
 				// eslint-disable-next-line
-				{ user_id: user._id, userName: user.userName },
+				{ _id: user._id, userName: user.userName },
 				JWT_SECRET_KEY,
 				{ expiresIn: '15m' }
 			);
@@ -43,7 +80,7 @@ router.post('/refresh', async (req, res): Promise<Response> => {
 	if (user) {
 		const token = sign(
 			// eslint-disable-next-line
-			{ user_id: user._id, userName: user.userName },
+			{ _id: user._id, userName: user.userName },
 			JWT_SECRET_KEY,
 			{ expiresIn: '15m' }
 		);

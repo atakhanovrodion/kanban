@@ -142,4 +142,38 @@ describe('AUTORIZATION', () => {
 				done();
 			});
 	});
+	it('should return 200 and token,username,refreshtoken on valid credentials ', (done) => {
+		request(app)
+			.post('/auth/register')
+			.send({ userName: 'registertest', password: 'testpass' })
+			.then((res) => {
+				expect(res.status).toBe(200);
+				expect(typeof res.body.token === 'string').toBeTruthy();
+				expect(typeof res.body.refreshToken === 'string').toBeTruthy();
+				User.find({ userName: res.body.userName })
+					.exec()
+					.then((user) => {
+						expect(user).toBeTruthy();
+						done();
+					});
+			});
+	});
+	it('should return 404  on invalid credentials', (done) => {
+		request(app)
+			.post('/auth/register')
+			.send({ userName: '', password: 'testpass' })
+			.then((res) => {
+				expect(res.status).toBe(404);
+				done();
+			});
+	});
+	it('should return 403 when trying to register already existen user', (done) => {
+		request(app)
+			.post('/auth/register')
+			.send({ userName: 'test', password: 'testpass' })
+			.then((res) => {
+				expect(res.status).toBe(403);
+				done();
+			});
+	});
 });

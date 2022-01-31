@@ -1,21 +1,10 @@
 import { BaseSyntheticEvent, useState } from 'react';
-import { login, register } from '../api';
+import { tryLogin, tryRegister, getBoards } from '../reducers/appReducer';
+import store from '../store';
 import '../styles/login.css';
 import LoginView from './LoginView';
 
-type LoginProps = {
-	stateHandler: (state: string) => void;
-	userHandler: (user: string) => void;
-	tokenHandler: (value: string) => void;
-	boardHandler: (boardId: string, token: string) => void;
-};
-
-const Login = ({
-	stateHandler,
-	userHandler,
-	tokenHandler,
-	boardHandler,
-}: LoginProps): JSX.Element => {
+const Login = (): JSX.Element => {
 	const [isLogin, setIsLogin] = useState(true);
 	const switchView = () => {
 		setIsLogin((prevState) => !prevState);
@@ -23,22 +12,9 @@ const Login = ({
 	const sendRequest = async (userName: string, password: string) => {
 		try {
 			if (isLogin) {
-				const res = await login(userName, password);
-
-				tokenHandler(res.data.token);
-				userHandler(res.data.userName);
-				if (res.data.boards.length !== 0) {
-					boardHandler(res.data.boards[0], res.data.token);
-					stateHandler('logged');
-				} else {
-					stateHandler('creating');
-				}
+				store.dispatch(tryLogin(userName, password));
 			} else {
-				const res = await register(userName, password);
-
-				tokenHandler(res.data.token);
-				userHandler(res.data.userName);
-				stateHandler('creating');
+				store.dispatch(tryRegister(userName, password));
 			}
 		} catch (err) {
 			console.log(err);

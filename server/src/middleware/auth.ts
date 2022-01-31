@@ -1,4 +1,4 @@
-import { verify, decode } from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 const { JWT_SECRET_KEY } = process.env;
