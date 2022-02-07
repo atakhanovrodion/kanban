@@ -1,3 +1,29 @@
-margin/padding opacity // task
-close click //EDIT task
-chose color //edit task
+show task properly
+
+
+app header 
+            boards 
+                    -> show boards names
+                    -> search panel
+            notifications
+                            => invite logic 
+                            => status change logic
+                            => delecte/rename logic
+            account settings
+
+board header    
+            boardName click
+                            -> update name
+            members 
+                    -> roles (owner/admin/standart)
+                    -> invite members (notification logic)
+            timer
+                    -> promodoro (25minut timer for task)
+            filter
+                    -> User/Color/Labels
+            board layout edit
+
+board 
+        -> add task properly
+        -> edit task
+        ->done task hisrory

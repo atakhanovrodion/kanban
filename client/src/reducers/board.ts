@@ -15,6 +15,8 @@ export const boardSlice = createSlice({
 		boardName: '',
 		headers: ['Todo', 'Done'],
 		members: [],
+		currentTask: '',
+		dropColumn: '',
 		tasks: [],
 	},
 	reducers: {
@@ -30,15 +32,29 @@ export const boardSlice = createSlice({
 		setTasks: (state, action) => {
 			state.tasks = action.payload;
 		},
+		setCurrentTask: (state, action) => {
+			state.currentTask = action.payload;
+		},
+		setDropColumn: (state, action) => {
+			state.dropColumn = action.payload;
+		},
 	},
 });
 
-const { setHeaders, setBoardName, setMembers, setTasks } = boardSlice.actions;
+const {
+	setHeaders,
+	setBoardName,
+	setMembers,
+	setTasks,
+	setCurrentTask,
+	setDropColumn,
+} = boardSlice.actions;
 
 export const selectBoardName = (state: RootState) => state.board.boardName;
 export const selectHeaders = (state: RootState) => state.board.headers;
 export const selectMembers = (state: RootState) => state.board.members;
 export const selectTasks = (state: RootState) => state.board.tasks;
+export { setTasks, setCurrentTask, setDropColumn };
 
 export const addBoard =
 	(
@@ -82,6 +98,26 @@ export const addTask =
 		try {
 			const api = new Api(getState().app.token);
 			const res = await api.addTask(getState().app.currentBoard, task);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+export const addUser =
+	(userId: string): ThunkAction<void, RootState, unknown, AnyAction> =>
+	async (dispatch, getState) => {
+		try {
+			const api = new Api(getState().app.token);
+			await api.addUser(userId, getState().app.currentBoard);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+export const sendTasks =
+	(tasks: any): ThunkAction<void, RootState, unknown, AnyAction> =>
+	async (dispatch, getState) => {
+		try {
+			const api = new Api(getState().app.token);
+			const res = await api.setTasks(getState().app.currentBoard, tasks);
 		} catch (error) {
 			console.error(error);
 		}

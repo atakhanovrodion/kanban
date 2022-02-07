@@ -10,11 +10,7 @@ import '../styles/app_header.css';
 
 import icon from '../images/menu_icon.svg';
 
-type AppHeaderProps = {
-	changeCurrentBoard: (boardName: string) => void;
-};
-
-const AppHeader = ({ changeCurrentBoard }: AppHeaderProps): JSX.Element => {
+const AppHeader = (): JSX.Element => {
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const menuStateHandler = () => {
 		setMenuOpen((prevState) => !prevState);

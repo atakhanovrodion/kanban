@@ -46,6 +46,17 @@ app.post('/board/:boardId', async (req, res) => {
 				return res.status(200).send(board);
 			}
 		}
+		if (req.body.action === 'set') {
+			const board = await Board.findById(req.params.boardId);
+			if (board) {
+				board.tasks = req.body.payload;
+				await board.save();
+				connections[req.params.boardId].forEach((connection) => {
+					connection.send(JSON.stringify(board.tasks));
+				});
+				return res.status(200).send(board);
+			}
+		}
 	} catch (err) {
 		console.error(err);
 		res.status(404).send(err);

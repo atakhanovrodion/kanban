@@ -60,5 +60,25 @@ router.post('/add', async (req: IRequest, res): Promise<Response | any> => {
 		return res.status(500).send('server error');
 	}
 });
+router.post(
+	'/:boardId/add',
+	async (req: IRequest, res): Promise<Response | any> => {
+		try {
+			const board = await Board.findById(req.params.boardId);
+			const user = await User.findById(req.body.userId);
+			if (user && board) {
+				board.members.push(req.body.userId);
+				user.boards?.push(req.params.boardId);
+				board.save();
+				user.save();
+				return res.status(200).send('ok');
+			}
+			return res.status(404);
+		} catch (err) {
+			console.log(err);
+			return res.status(500).send('server error');
+		}
+	}
+);
 
 export default router;

@@ -6,9 +6,12 @@ import { IRequest } from '../middleware/auth';
 const router = express.Router();
 
 router.get('/users', async (req, res) => {
-	const users = await User.find();
-
-	res.send(users);
+	const users = await User.find({});
+	const data = users.map((user) => ({
+		_id: user._id,
+		userName: user.userName,
+	}));
+	res.send(data);
 });
 
 router.get('/user', async (req: IRequest, res) => {

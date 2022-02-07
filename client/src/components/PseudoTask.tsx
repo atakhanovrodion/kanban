@@ -1,18 +1,9 @@
-import React from 'react';
-
 type PseudoTaskProps = {
-  text: string;
+	Prototype: JSX.Element;
 };
 
-const PseudoTask = ({ text }: PseudoTaskProps): JSX.Element => (
-  <div
-    className="pseudo_task"
-    onDragOver={(e) => {
-      e.preventDefault();
-    }}
-  >
-    <span className="task_text">{text}</span>
-  </div>
+const PseudoTask = ({ Prototype }: PseudoTaskProps): JSX.Element => (
+	<Prototype />
 );
 
 export default PseudoTask;

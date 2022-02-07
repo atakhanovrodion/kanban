@@ -87,6 +87,13 @@ export default class Api {
 		console.log(res);
 		return res.data;
 	}
+	async getUsers(): Promise<[{ id: string; userName: string }]> {
+		const res = await this.client.get('/users');
+		return res.data;
+	}
+	async addUser(userId: string, boardId: string): Promise<any> {
+		return await this.client.post(`/boards/${boardId}/add`, { userId });
+	}
 	async logout(): Promise<Response> {
 		return await this.client.post('/auth/logout');
 	}
@@ -99,6 +106,13 @@ export default class Api {
 			payload: data,
 		});
 	}
+	async setTasks(boardId: string, data: any): Promise<Response> {
+		return await this.client.post(`/board/${boardId}`, {
+			action: 'set',
+			payload: data,
+		});
+	}
+
 	async register(userName: string, password: string): Promise<AxiosResponse> {
 		const res = await this.client.post('/auth/register', {
 			userName,

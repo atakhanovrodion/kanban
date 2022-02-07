@@ -8,17 +8,11 @@ import AppHeader from './AppHeader';
 import Board from './Board';
 import Login from './Login';
 import Wrapper from './Wrapper';
-
-import { IBoard, setBoard } from '../api';
 import CreateNewBoard from './CreateNewBoard';
 import '../styles/app.css';
 
 const App = (): JSX.Element => {
-	const [token, setToken] = useState('');
-	const [boardsId, getBoardsId] = useState<any[]>([]);
 	const appState = useSelector(selectAppState);
-
-	const dispatch = useDispatch();
 	useEffect(() => {
 		try {
 			store.dispatch(getUser());
@@ -26,10 +20,6 @@ const App = (): JSX.Element => {
 			console.log(err);
 		}
 	}, []);
-
-	const tokenHandler = (value: string) => {
-		setToken(value);
-	};
 
 	// eslint-disable-next-line
 

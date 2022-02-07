@@ -15,6 +15,7 @@ export const appSlice = createSlice({
 		token: '',
 		isLoading: false,
 		currentBoard: '',
+		usersList: [],
 	},
 	reducers: {
 		setUserName: (state, action) => {
@@ -32,12 +33,15 @@ export const appSlice = createSlice({
 		setCurrentBoard: (state, action) => {
 			state.currentBoard = action.payload;
 		},
+		setUsersList: (state, action) => {
+			state.usersList = action.payload;
+		},
 	},
 });
 
 export const { setIsLoading } = appSlice.actions;
 
-const { setUserName, setToken, setAppState, setCurrentBoard } =
+const { setUserName, setToken, setAppState, setCurrentBoard, setUsersList } =
 	appSlice.actions;
 
 export const login =
@@ -136,12 +140,27 @@ export const logout =
 			console.error(err);
 		}
 	};
+export const getUsers =
+	(): ThunkAction<void, RootState, unknown, AnyAction> =>
+	async (dispatch, getState) => {
+		try {
+			const api = new Api(getState().app.token);
+			const res = await api.getUsers();
+			const users = res.filter(
+				(user) => user.userName !== getState().app.userName
+			);
+			dispatch(setUsersList(users));
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 export const selectAppState = (state: RootState) => state.app.appState;
 export const selectUserName = (state: RootState) => state.app.userName;
 
 export const selectCurrentBoard = (state: RootState) => state.app.currentBoard;
 
+export const selectUsersList = (state: RootState) => state.app.usersList;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

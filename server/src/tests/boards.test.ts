@@ -8,13 +8,20 @@ import app from '../app';
 let testToken: string;
 let boardId: string;
 let testUserId: any;
+let testUserId2: any;
 beforeAll(async () => {
 	await mongoose.connect('mongodb://localhost:27017/boarsdtest');
 	const testUser = new User<IUser>({
 		userName: 'test',
 		hash: 'test',
 	});
+	const testUser2 = new User<IUser>({
+		userName: 'test2',
+		hash: 'test',
+	});
 	testUserId = testUser._id;
+
+	testUserId2 = testUser2._id;
 	testToken = issueToken({
 		userName: testUser.userName,
 		_Id: testUser._id.toString(),
@@ -28,6 +35,7 @@ beforeAll(async () => {
 	boardId = testBoard._id.toString();
 	testUser.boards?.push(testBoard._id);
 
+	await testUser2.save();
 	await testUser.save();
 	await testBoard.save();
 });
@@ -78,5 +86,21 @@ describe('BOARDS', () => {
 			});
 
 		expect(res.status).toBe(403);
+	});
+	it('user can add another user to the board', async () => {
+		const res = await request(app)
+			.post(`/boards/${boardId}/add`)
+			.set('Authorization', testToken)
+			.send({
+				userId: testUserId2.toString(),
+			});
+		expect(res.status).toBe(200);
+		const secRes = await request(app)
+			.get(`/boards/${boardId}`)
+			.set('Authorization', testToken);
+		expect(secRes.status).toBe(200);
+		expect(secRes.body.members.length).toBeGreaterThan(1);
+		const user = await User.findById(testUserId2);
+		expect(user?.boards?.length).toBe(1);
 	});
 });

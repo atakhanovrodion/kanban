@@ -54,7 +54,9 @@ afterAll(async () => {
 });
 
 describe('test', () => {
-	it('can add new task and second user get updated board', async () => {
+	it.todo(
+		'can add new task and second user get updated board'
+	); /* async () => {
 		const url = `/board/${boardId}/`;
 		//	const socket1 = new WebSocket(`ws://localhost:3000/board/${boardId}`);
 		//	const socket2 = new WebSocket(`ws://localhost:3000/board/${boardId}`);
@@ -71,5 +73,5 @@ describe('test', () => {
 			});
 
 		expect(res.status).toBe(200);
-	});
+	}); */
 });

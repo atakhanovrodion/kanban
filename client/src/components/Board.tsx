@@ -6,6 +6,7 @@ import {
 	selectHeaders,
 	getBoard,
 	selectTasks,
+	setTasks,
 } from '../reducers/board';
 
 import Column from './Column';
@@ -39,6 +40,7 @@ const Board = (): JSX.Element => {
 			const socket = new WebSocket(`ws://localhost:3000/board/${currentBoard}`);
 			socket.onmessage = (evt) => {
 				console.log(JSON.parse(evt.data));
+				store.dispatch(setTasks(JSON.parse(evt.data)));
 			};
 		}
 	}, [currentBoard]);
@@ -55,7 +57,7 @@ const Board = (): JSX.Element => {
 		deleteItem(id, newArray);
 		setTasks(newArray);
 	};
-
+	/*
 	const moveTask = (newColumn: string, id: string): void => {
 		if (newColumn === currentColumn) {
 			return;
@@ -68,7 +70,7 @@ const Board = (): JSX.Element => {
 		newArray[simpleHash(newColumn)].push(newTask[0]);
 		setTasks(newArray);
 	};
-
+*/
 	const showAddTaskWindow = (columnName: string) => {
 		setCurrentColumn(columnName);
 
@@ -113,7 +115,7 @@ const Board = (): JSX.Element => {
 	const filterOnUser = (user: string): void => {
 		setFilter([user]);
 	};
-
+	filter;
 	//--------------------------
 	const [currentTask, setCurrentTask] = useState('');
 	const [currentTaskColor, setCurrentTaskColor] = useState('');
@@ -135,7 +137,7 @@ const Board = (): JSX.Element => {
 				showEditTaskWindow={showEditTaskWindow}
 				onTaskDrag={onTaskDrag}
 				currentTask={currentTask}
-				moveTask={moveTask}
+				//	moveTask={moveTask}
 				deleteTask={deleteTask}
 				currentTaskColorHandler={currentTaskColorHandler}
 				filter={filter}
@@ -159,7 +161,6 @@ const Board = (): JSX.Element => {
 			<div className="columns_container">
 				<ul>{columnsElement}</ul>
 			</div>
-
 			{taskWrapper}
 		</div>
 	);
