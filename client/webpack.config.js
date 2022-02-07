@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
 	mode: 'development',
 	entry: './src/index.tsx',
+	target: 'web',
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
@@ -36,5 +37,11 @@ module.exports = {
 	devServer: {
 		port: 8080,
 		hot: true,
+		/*	proxy: {
+			'/websocket': {
+				target: 'ws://localhost:8080',
+				ws: true,
+			},
+		},*/
 	},
 };

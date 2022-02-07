@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 import CreateNewBoard from './CreateNewBoard';
 import '../styles/header_menu.css';
 
-type HeaderMenuProps = {
-	changeCurrentBoard: (boardName: string) => void;
-
-	appStateHandler: (state: string) => void;
-};
-
-const HeaderMenu = ({
-	changeCurrentBoard,
-	appStateHandler,
-}: HeaderMenuProps): JSX.Element => {
+const HeaderMenu = (): JSX.Element => {
 	const [boards, setBoards] = useState([]);
 	const itemList = boards.map((item) => (
 		<li key={item}>
@@ -19,9 +10,7 @@ const HeaderMenu = ({
 				className="menu_board_button"
 				type="button"
 				key={item}
-				onClick={() => {
-					changeCurrentBoard(item);
-				}}
+				onClick={() => {}}
 			>
 				{item}
 			</button>

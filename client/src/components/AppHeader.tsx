@@ -24,7 +24,7 @@ const AppHeader = ({ changeCurrentBoard }: AppHeaderProps): JSX.Element => {
 
 	const menuElement = isMenuOpen && (
 		<Wrapper stateHandler={menuStateHandler} className="wrapper">
-			<HeaderMenu changeCurrentBoard={changeCurrentBoard} />
+			<HeaderMenu />
 		</Wrapper>
 	);
 	return (
@@ -36,7 +36,7 @@ const AppHeader = ({ changeCurrentBoard }: AppHeaderProps): JSX.Element => {
 			{menuElement}
 			<span className="header_title">KANBAN</span>
 			<button className="user_settings_button" type="button">
-				<MemberIcon name={userName} />
+				<MemberIcon name={userName} type="user_settings" active={true} />
 			</button>
 		</header>
 	);

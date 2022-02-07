@@ -10,7 +10,7 @@ interface ITask {
 	text: string;
 	header: string;
 	color: string;
-	members: Types.Array<string>;
+	members?: Types.Array<string>;
 	labels?: string[];
 	description?: string;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch, useStore } from 'react-redux';
-import { selectAppState, getBoards } from '../reducers/appReducer';
+import { selectAppState, getBoards, getUser } from '../reducers/appReducer';
 import store from '../store';
 
 import AppHeader from './AppHeader';
@@ -9,7 +9,7 @@ import Board from './Board';
 import Login from './Login';
 import Wrapper from './Wrapper';
 
-import { IBoard, setBoard, getBoard } from '../api';
+import { IBoard, setBoard } from '../api';
 import CreateNewBoard from './CreateNewBoard';
 import '../styles/app.css';
 
@@ -21,8 +21,7 @@ const App = (): JSX.Element => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		try {
-			console.log('here');
-			store.dispatch(getBoards());
+			store.dispatch(getUser());
 		} catch (err) {
 			console.log(err);
 		}
@@ -33,16 +32,6 @@ const App = (): JSX.Element => {
 	};
 
 	// eslint-disable-next-line
-	const boardHandler = async (boardId: any, token: string) => {
-		console.log('boardHandler');
-		try {
-			console.log(token);
-			const res = await getBoard(boardId, token);
-			console.log(res);
-		} catch (err) {
-			console.log(err);
-		}
-	};
 
 	const loginElement = appState === 'unlogged' && (
 		<Wrapper className="wrapper_dark">

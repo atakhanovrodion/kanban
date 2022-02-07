@@ -21,8 +21,7 @@ router.get(
 
 router.post('/add', async (req: IRequest, res): Promise<Response | any> => {
 	try {
-		const user = await User.findById(req.user._id);
-
+		const user = await User.findById(req.user._Id);
 		if (user) {
 			let isUniue = true;
 			const promises = [];
@@ -58,7 +57,7 @@ router.post('/add', async (req: IRequest, res): Promise<Response | any> => {
 		return res.status(404);
 	} catch (err) {
 		console.log(err);
-		return res.status(404).send('server error');
+		return res.status(500).send('server error');
 	}
 });
 

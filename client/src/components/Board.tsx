@@ -1,7 +1,12 @@
-import { useState, BaseSyntheticEvent } from 'react';
+import { useState, BaseSyntheticEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectAppState } from '../reducers/appReducer';
-import { selectBoardName, selectHeaders } from '../reducers/board';
+import { selectAppState, selectCurrentBoard } from '../reducers/appReducer';
+import {
+	selectBoardName,
+	selectHeaders,
+	getBoard,
+	selectTasks,
+} from '../reducers/board';
 
 import Column from './Column';
 import simpleHash from '../helper';
@@ -9,57 +14,34 @@ import AddTaskPage from './AddTaskPage';
 import Wrapper from './Wrapper';
 import BoardHeader from './BoardHeader';
 
-import { setBoard, ITask } from '../api';
+import { ITask } from '../api';
 import EditTaskPage from './EditTaskPage';
 
+import store from '../store';
 import '../styles/board.css';
-
-type BoadrdProps = {
-	memberList: string[];
-	currentBoard: string;
-	data: ITask[];
-	appState: string;
-	headers: string[];
-};
 
 const Board = (): JSX.Element => {
 	const appState = useSelector(selectAppState);
 	const headers = useSelector(selectHeaders);
-
-	const [tasks, setTasks] = useState<ITask[][]>([[], [], [], []]);
+	const currentBoard = useSelector(selectCurrentBoard);
+	const tasks = useSelector(selectTasks);
 	const [filter, setFilter] = useState(['']);
 	const [currentColumn, setCurrentColumn] = useState('BackLog');
 	const [count, setCount] = useState(0);
 	const [windowState, setWindowState] = useState('');
-	const getTasks = () => {
+	useEffect(() => {
 		if (appState === 'logged') {
-			console.log('loading');
+			store.dispatch(getBoard(currentBoard));
 		}
-	};
-
-	const addTask = (
-		{
-			name,
-			color,
-			members = ['admin'],
-			labels = [''],
-			description = '',
-		}: ITask,
-		column = currentColumn
-	): void => {
-		if (name === '') return;
-		const newArray = tasks.map((task) => [...task]);
-		const id = `${name}+${color}`;
-		newArray[simpleHash(column)].push({
-			id,
-			name,
-			color,
-			members,
-			labels,
-			description,
-		});
-		setTasks(newArray);
-	};
+	}, [appState]);
+	useEffect(() => {
+		if (currentBoard) {
+			const socket = new WebSocket(`ws://localhost:3000/board/${currentBoard}`);
+			socket.onmessage = (evt) => {
+				console.log(JSON.parse(evt.data));
+			};
+		}
+	}, [currentBoard]);
 
 	const deleteItem = (id: string, array: ITask[][]): void => {
 		const ind = array[simpleHash(currentColumn)].findIndex(
@@ -144,11 +126,11 @@ const Board = (): JSX.Element => {
 		setCurrentTask(target);
 	};
 
-	const columnsElement = headers.map((item) => (
-		<li key={item} className="columnContainer">
+	const columnsElement = headers.map((item, id) => (
+		<li key={id} className="columnContainer">
 			<Column
 				columnName={item}
-				tasks={tasks[simpleHash(item)]}
+				tasks={tasks.filter((task) => task.header === item)}
 				showAddTaskWindow={showAddTaskWindow}
 				showEditTaskWindow={showEditTaskWindow}
 				onTaskDrag={onTaskDrag}
@@ -164,11 +146,7 @@ const Board = (): JSX.Element => {
 	const taskWrapper = windowState && (
 		<Wrapper stateHandler={wrapperHandler} className="wrapper_dark">
 			{windowState === 'AddTaskPage' || windowState === 'TaskToolBar' ? (
-				<AddTaskPage
-					addTask={addTask}
-					members={memberList}
-					windowStateHandler={windowStateHandler}
-				/>
+				<AddTaskPage windowStateHandler={windowStateHandler} />
 			) : (
 				<EditTaskPage color={currentTaskColor} />
 			)}

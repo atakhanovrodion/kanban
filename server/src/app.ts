@@ -7,7 +7,7 @@ import 'dotenv/config';
 
 import { WebSocket } from 'ws';
 import { Board, Task } from './models/Board';
-import routes from './routes';
+import routes from './routes/routes';
 import authRoutes from './routes/auth';
 import boardsRoutes from './routes/boards';
 import { verifyToken } from './middleware/auth';
@@ -18,6 +18,7 @@ app.use(cors());
 
 const connections: { [name: string]: WebSocket[] } = {};
 app.ws('/board/:boardId', (ws, req) => {
+	console.log(req.params.boardId);
 	if (connections[req.params.boardId]) {
 		connections[req.params.boardId].push(ws);
 	} else {
@@ -26,23 +27,22 @@ app.ws('/board/:boardId', (ws, req) => {
 		connections[req.params.boardId].push(ws);
 	}
 });
-app.use('/', routes);
 app.use('/auth/', authRoutes);
 app.use(verifyToken);
+
+app.use('/', routes);
 app.use('/boards/', boardsRoutes);
 app.post('/board/:boardId', async (req, res) => {
 	try {
-		console.log(req.body);
-		if (req.body.type === 'add') {
+		if (req.body.action === 'add') {
 			const board = await Board.findById(req.params.boardId);
 			if (board) {
-				const task = await new Task(req.body.content);
+				const task = new Task(req.body.payload);
 				board.tasks.push(task);
 				await board.save();
 				connections[req.params.boardId].forEach((connection) => {
-					connection.send(board._id);
+					connection.send(JSON.stringify(board.tasks));
 				});
-
 				return res.status(200).send(board);
 			}
 		}

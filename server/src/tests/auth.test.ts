@@ -75,10 +75,9 @@ describe('AUTORIZATION', () => {
 		done();
 	});
 	it('should return 200 if token is valid', (done) => {
-		const token = testToken;
 		request(app)
 			.get('/users')
-			.set('Authorization', token)
+			.set('Authorization', testToken)
 			.then((res) => {
 				expect(res.status).toBe(200);
 				done();
@@ -132,14 +131,8 @@ describe('AUTORIZATION', () => {
 					.send({ refreshToken: 'LOGOUT_REFRESH_TOKEN' })
 					.then((refRes) => {
 						expect(refRes.status).toBe(404);
+						done();
 					});
-				request(app)
-					.get('/users')
-					.send({ refreshToken: logoutToken })
-					.then((useRes) => {
-						expect(useRes.status).toBe(403);
-					});
-				done();
 			});
 	});
 	it('should return 200 and token,username,refreshtoken on valid credentials ', (done) => {
@@ -175,5 +168,11 @@ describe('AUTORIZATION', () => {
 				expect(res.status).toBe(403);
 				done();
 			});
+	});
+	it('should return user and 200', async () => {
+		const res = await request(app).get('/user').set('Authorization', testToken);
+		expect(res.status).toBe(200);
+		expect(typeof res.body.userName === 'string').toBeTruthy();
+		expect(Array.isArray(res.body.boards)).toBeTruthy();
 	});
 });

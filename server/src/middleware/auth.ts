@@ -14,7 +14,7 @@ const verifyToken = (
 	next: NextFunction
 ): Response | void => {
 	const token = req.headers.authorization;
-	if (!token) return res.status(403).send('need token for authentication');
+	if (!token) return res.status(401).send('need token for authentication');
 	try {
 		const decoded = verify(token, JWT_SECRET_KEY);
 		req.user = decoded;

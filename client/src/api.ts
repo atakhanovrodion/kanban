@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 
 const config: AxiosRequestConfig = {
 	baseURL: 'http://localhost:3000/',
@@ -20,107 +20,92 @@ interface IBoard {
 	tasks: ITask[][];
 }
 
-const login = async (
-	userName: string,
-	password: string
-): Promise<AxiosResponse> => {
-	console.log('/auth/login');
-	const res: AxiosResponse = await axios.post(
-		'/auth/login',
-		{
+export default class Api {
+	token: string | undefined;
+	client: AxiosInstance;
+	constructor(token: string | undefined = undefined) {
+		this.client = axios.create(config);
+		this.token = token;
+		this.client.interceptors.request.use((config) => {
+			if (!this.token) {
+				return config;
+			}
+			const newConfig = {
+				headers: {},
+				...config,
+			};
+			newConfig.headers.Authorization = this.token;
+			return newConfig;
+		});
+		this.client.interceptors.response.use(
+			(res) => res,
+			async (err) => {
+				if (
+					!global.localStorage.refreshToken ||
+					err.response.status !== 401 ||
+					err.config.retry
+				) {
+					throw err;
+				}
+				const { data } = await this.client.post('/auth/refresh', {
+					refreshToken: global.localStorage.refreshToken,
+				});
+				this.token = data.token;
+				global.localStorage.setItem('refreshToken', data.refreshToken);
+				const newRequest = {
+					...err.config,
+					retry: true,
+				};
+				return this.client(newRequest);
+			}
+		);
+	}
+	async login(userName: string, password: string): Promise<AxiosResponse> {
+		return await this.client.post('/auth/login', {
 			userName,
 			password,
-		},
-		config
-	);
-	return res;
-};
-
-const tryGetBoards = async (token: string): Promise<IBoard[] | any> => {
-	try {
-		config.headers.authorization = token || global.localStorage.token;
-		const res: AxiosResponse = await axios.get(`/boards/`, config);
-		return res.data;
-	} catch (err: any) {
-		if (err.response) {
-			if (err.response.status === 401) {
-				tryRefresh(global.localStorage.refreshToken);
-			}
-		}
-		return err;
+		});
 	}
-};
-
-const tryRefresh = async (refreshToken: string) => {
-	const token = refreshToken || global.localStorage.refreshToken;
-
-	const res: AxiosResponse = await axios.post(
-		'/auth/refresh',
-		{
-			refreshToken: token,
-		},
-		config
-	);
-	return res.data;
-};
-
-const setBoard = async (id: number, data: IBoard): Promise<string> => {
-	console.log('here');
-	const res = await axios.post(`/boards/${id}`, data, config);
-	return res.data;
-};
-
-const register = async (
-	userName: string,
-	password: string
-): Promise<AxiosResponse> => {
-	const res = await axios.post(
-		'/auth/register',
-		{ userName, password },
-		config
-	);
-	console.log(res);
-	return res;
-};
-
-const getBoard = async (boardId: any, token: string): Promise<any> => {
-	try {
-		config.headers.authorization = token;
+	async getBoards(): Promise<IBoard[] | any> {
+		const res: AxiosResponse = await this.client.get(`/boards/`);
+		console.log(res);
+		return res.data;
+	}
+	async getBoard(boardId: any): Promise<any> {
+		console.log('BOARD');
 		const queryParam = boardId.toString();
-		const res = await axios.get(`/board/${queryParam}`, config);
-		return res.data;
-	} catch (err) {
-		return err;
-	}
-};
-
-const tryAddBoard = async (
-	boardName: string,
-	headers: string[],
-	token: string
-): Promise<any> => {
-	try {
-		config.headers.authorization = token || global.localStorage.token;
-		const res = await axios.post('/boards/add', { boardName, headers }, config);
+		const res = await this.client.get(`/boards/${queryParam}`);
 
 		return res.data;
-	} catch (err: any) {
-		console.log(err);
-		if (err.response) {
-			if (err.response.status === 401) {
-				tryRefresh(global.localStorage.refreshToken);
-			}
-		}
 	}
-};
+	async addBoard(boardName: string, headers: string[]): Promise<any> {
+		const res = await this.client.post('/boards/add', { boardName, headers });
+		return res.data;
+	}
+	async getUser(): Promise<{ userName: string; boards: string[] }> {
+		const res = await this.client.get('/user');
+		console.log(res);
+		return res.data;
+	}
+	async logout(): Promise<Response> {
+		return await this.client.post('/auth/logout');
+	}
+	async addTask(
+		boardId: string,
+		data: { text: string; header: string; color: string }
+	): Promise<Response> {
+		return await this.client.post(`/board/${boardId}`, {
+			action: 'add',
+			payload: data,
+		});
+	}
+	async register(userName: string, password: string): Promise<AxiosResponse> {
+		const res = await this.client.post('/auth/register', {
+			userName,
+			password,
+		});
+		return res;
+	}
+}
 
 export type { ITask, IBoard };
-export {
-	tryGetBoards,
-	login,
-	setBoard,
-	register,
-	tryAddBoard,
-	getBoard,
-	tryRefresh,
-};

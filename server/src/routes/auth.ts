@@ -32,7 +32,7 @@ router.post('/register', async (req, res): Promise<Response> => {
 		});
 		const token = sign(
 			// eslint-disable-next-line
-			{ _id: newUser._id, userName: newUser.userName },
+			{ _Id: newUser._id, userName: newUser.userName },
 			JWT_SECRET_KEY,
 			{ expiresIn: '15m' }
 		);
@@ -59,14 +59,19 @@ router.post('/login', async (req, res): Promise<Response> => {
 		if (user) {
 			const token = sign(
 				// eslint-disable-next-line
-				{ _id: user._id, userName: user.userName },
+				{ _Id: user._id, userName: user.userName },
 				JWT_SECRET_KEY,
 				{ expiresIn: '15m' }
 			);
 			user.token = token;
 			user.refreshToken = uuid();
 			await user.save();
-			return res.status(200).json(user);
+			return res.status(200).send({
+				userName: user.userName,
+				boards: user.boards,
+				token: user.token,
+				refreshToken: user.refreshToken,
+			});
 		}
 		return res.status(403).json({ error: 'wrong login or password' });
 	} catch (err) {
@@ -79,8 +84,7 @@ router.post('/refresh', async (req, res): Promise<Response> => {
 	const user = await User.findOne({ refreshToken });
 	if (user) {
 		const token = sign(
-			// eslint-disable-next-line
-			{ _id: user._id, userName: user.userName },
+			{ _Id: user._id, userName: user.userName },
 			JWT_SECRET_KEY,
 			{ expiresIn: '15m' }
 		);

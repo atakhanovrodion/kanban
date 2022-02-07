@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, useState } from 'react';
-import { tryLogin, tryRegister, getBoards } from '../reducers/appReducer';
+import { login, register, getBoards } from '../reducers/appReducer';
 import store from '../store';
 import '../styles/login.css';
 import LoginView from './LoginView';
@@ -12,9 +12,9 @@ const Login = (): JSX.Element => {
 	const sendRequest = async (userName: string, password: string) => {
 		try {
 			if (isLogin) {
-				store.dispatch(tryLogin(userName, password));
+				store.dispatch(login(userName, password));
 			} else {
-				store.dispatch(tryRegister(userName, password));
+				store.dispatch(register(userName, password));
 			}
 		} catch (err) {
 			console.log(err);
