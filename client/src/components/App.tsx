@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAppState, getUser } from '../reducers/appReducer';
 
-import { useSelector, useDispatch, useStore } from 'react-redux';
-import { selectAppState, getBoards, getUser } from '../reducers/appReducer';
 import store from '../store';
 
 import AppHeader from './AppHeader';
@@ -20,8 +20,6 @@ const App = (): JSX.Element => {
 			console.log(err);
 		}
 	}, []);
-
-	// eslint-disable-next-line
 
 	const loginElement = appState === 'unlogged' && (
 		<Wrapper className="wrapper_dark">

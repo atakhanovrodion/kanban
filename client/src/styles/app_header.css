@@ -1,7 +1,7 @@
 .app_header {
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 15px 100px 1fr 35px 15px;
+  grid-template-columns: 15px 100px 1fr 30px 30px 15px;
   background-color: var(--dark-bg-color);
   align-items: center;
 }
@@ -41,8 +41,12 @@
   cursor: pointer;
 }
 
-.user_settings_button {
+.notification {
   grid-column: 4/5;
+}
+
+.user_settings_button {
+  grid-column: 5/6;
   margin: 0;
   padding-left: 3px;
   background-color: var(--light-bg-color);

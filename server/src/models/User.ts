@@ -6,6 +6,7 @@ interface IUser {
 	boards?: any[];
 	token?: string;
 	refreshToken?: string;
+	notifications?: any[];
 }
 
 const schecma = new Schema<IUser>({
@@ -14,6 +15,7 @@ const schecma = new Schema<IUser>({
 	boards: { type: Array, default: [] },
 	token: String,
 	refreshToken: String,
+	notifications: { type: Array, default: [] },
 });
 
 const User = model('User', schecma);

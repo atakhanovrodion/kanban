@@ -1,30 +1,19 @@
 import { useSelector } from 'react-redux';
 
-import {
-	selectBoardName,
-	selectHeaders,
-	selectMembers,
-} from '../reducers/board';
+import { selectBoardName, selectMembers } from '../reducers/board';
 
 import '../styles/board_header.css';
 import MemberIcon from './MemberIcon';
-import icon from '../images/menu_icon_dark.svg';
 import PlusIcon from './PlusIcon';
 import FilterIcon from './FilterIcon';
 import BoardHeaderAdd from './BoardHeaderAdd';
+import BoardHeaderRename from './BoardHeaderRename';
 import Wrapper from './Wrapper';
+import BoardHeaderMenu from './BoardHeadermenu';
+
 import { useState } from 'react';
 
-type BoardHeaderProps = {
-	filterOnUser: (user: string) => void;
-
-	filter: string[];
-};
-
-const BoardHeader = ({
-	filterOnUser,
-	filter,
-}: BoardHeaderProps): JSX.Element => {
+const BoardHeader = (): JSX.Element => {
 	const boardName = useSelector(selectBoardName);
 	const memberList = useSelector(selectMembers);
 
@@ -36,7 +25,7 @@ const BoardHeader = ({
 
 	const members = memberList.map((member) => (
 		<li key={member}>
-			<MemberIcon name={member} filterOnUser={filterOnUser} filter={filter} />
+			<MemberIcon name={member} />
 		</li>
 	));
 
@@ -48,19 +37,15 @@ const BoardHeader = ({
 
 	return (
 		<div className="board_header">
-			<span className="board_title">{boardName}</span>
-
+			<BoardHeaderRename />
 			<ul className="member_list">
 				{members}
 				<li>
 					<PlusIcon handler={addMenuHandler} />
 				</li>
 			</ul>
-			<FilterIcon filter={filter} />
-			<button className="board_header_button" type="button">
-				<img src={icon} alt="kekw" width="20px" height="20px" />
-				Menu
-			</button>
+			<FilterIcon />
+			<BoardHeaderMenu />
 			{menuElement}
 		</div>
 	);

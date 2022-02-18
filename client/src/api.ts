@@ -6,6 +6,7 @@ const config: AxiosRequestConfig = {
 };
 
 interface ITask {
+	_id: string;
 	text: string;
 	header: string;
 	color: string;
@@ -68,21 +69,41 @@ export default class Api {
 	}
 	async getBoards(): Promise<IBoard[] | any> {
 		const res: AxiosResponse = await this.client.get(`/boards/`);
-		console.log(res);
 		return res.data;
 	}
+	async accept(notificationId: string): Promise<AxiosResponse> {
+		return await this.client.post('/accept', {
+			notificationId,
+		});
+	}
+	async decline(notificationId: string): Promise<AxiosResponse> {
+		return await this.client.post('/decline', {
+			notificationId,
+		});
+	}
+
 	async getBoard(boardId: any): Promise<any> {
-		console.log('BOARD');
 		const queryParam = boardId.toString();
 		const res = await this.client.get(`/boards/${queryParam}`);
-
+		console.log(res.data);
 		return res.data;
 	}
 	async addBoard(boardName: string, headers: string[]): Promise<any> {
 		const res = await this.client.post('/boards/add', { boardName, headers });
 		return res.data;
 	}
-	async getUser(): Promise<{ userName: string; boards: string[] }> {
+	async updateBoard(boardId: any, ...args: any): Promise<Response> {
+		return await this.client.post(`/boards/${boardId}/update`, ...args);
+	}
+	async removeBoard(boardId: any): Promise<Response> {
+		return await this.client.post(`/boards/${boardId}/remove`);
+	}
+
+	async getUser(): Promise<{
+		userName: string;
+		boards: string[];
+		notifications: [];
+	}> {
 		const res = await this.client.get('/user');
 		console.log(res);
 		return res.data;
@@ -92,7 +113,7 @@ export default class Api {
 		return res.data;
 	}
 	async addUser(userId: string, boardId: string): Promise<any> {
-		return await this.client.post(`/boards/${boardId}/add`, { userId });
+		return await this.client.post(`/boards/${boardId}/invite`, { userId });
 	}
 	async logout(): Promise<Response> {
 		return await this.client.post('/auth/logout');

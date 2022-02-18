@@ -7,6 +7,9 @@ import app from '../app';
 
 let testToken: string;
 let boardId: string;
+let boardId2: string;
+
+let boardId3: string;
 let testUserId: any;
 let testUserId2: any;
 beforeAll(async () => {
@@ -33,11 +36,28 @@ beforeAll(async () => {
 		tasks: [],
 	});
 	boardId = testBoard._id.toString();
+	const testBoard2 = new Board<IBoard>({
+		boardName: 'testBoard',
+		headers: ['test', 'test1', 'test2'],
+		members: [testUser._id],
+		tasks: [],
+	});
+	const testBoard3 = new Board<IBoard>({
+		boardName: 'testBoard',
+		headers: ['test', 'test1', 'test2'],
+		members: [testUser._id],
+		tasks: [],
+	});
+	boardId3 = testBoard3._id.toString();
+	boardId2 = testBoard._id.toString();
 	testUser.boards?.push(testBoard._id);
 
+	testUser.boards?.push(testBoard3._id);
 	await testUser2.save();
 	await testUser.save();
 	await testBoard.save();
+	await testBoard3.save();
+	await testBoard2.save();
 });
 afterAll(async () => {
 	await User.deleteMany({});
@@ -75,32 +95,29 @@ describe('BOARDS', () => {
 		const user = await User.findById(testUserId);
 		expect(user?.boards?.length).toBeGreaterThan(1);
 	});
-	it('Get 403 when trying to create board with same boardName', async () => {
+	it('User can update boardName', async () => {
 		const res = await request(app)
-			.post('/boards/add')
+			.post(`/boards/${boardId2}/update`)
 			.set('Authorization', testToken)
 			.send({
-				boardName: 'testBoard',
-				headers: ['todo', 'kekw', 'done'],
-				tasks: [],
-			});
-
-		expect(res.status).toBe(403);
-	});
-	it('user can add another user to the board', async () => {
-		const res = await request(app)
-			.post(`/boards/${boardId}/add`)
-			.set('Authorization', testToken)
-			.send({
-				userId: testUserId2.toString(),
+				boardName: 'newBoardName',
 			});
 		expect(res.status).toBe(200);
 		const secRes = await request(app)
-			.get(`/boards/${boardId}`)
+			.get(`/boards/${boardId2}`)
 			.set('Authorization', testToken);
+
 		expect(secRes.status).toBe(200);
-		expect(secRes.body.members.length).toBeGreaterThan(1);
-		const user = await User.findById(testUserId2);
-		expect(user?.boards?.length).toBe(1);
+		expect(secRes.body.boardName).toBe('newBoardName');
+	});
+	it('User cant remove board', async () => {
+		const res = await request(app)
+			.post(`/boards/${boardId3}/remove`)
+			.set('Authorization', testToken);
+		expect(res.status).toBe(200);
+		const user = await User.findById(testUserId);
+		const board = await Board.findById(boardId3);
+		expect(user?.boards?.includes(boardId3)).toBeFalsy();
+		expect(board).toBe(null);
 	});
 });

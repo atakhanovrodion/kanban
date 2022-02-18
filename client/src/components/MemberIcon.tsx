@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useState } from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
 import '../styles/member_icon.css';
 import Wrapper from './Wrapper';
 import IconWindow from './IconWindow';

@@ -5,17 +5,7 @@ import store from '../store';
 
 import '../styles/create_new_board.css';
 
-type createNewBoardProps = {
-	appStateHandler: (state: string) => void;
-	boardHandler: (boardId: string, token: string) => void;
-	token: string;
-};
-
-const CreateNewBoard = ({
-	appStateHandler,
-	boardHandler,
-	token,
-}: createNewBoardProps): JSX.Element => {
+const CreateNewBoard = (): JSX.Element => {
 	const [boardName, setBoardName] = useState('');
 	const [headers, setHeaders] = useState([
 		'ToDo',

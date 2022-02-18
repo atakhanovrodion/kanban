@@ -1,8 +1,9 @@
 .column_body {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background-color: white;
+  height: 520px;
+  overflow: auto;
 }
 .columnContainer {
   border: 1px solid #6464643f;

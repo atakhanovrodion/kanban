@@ -3,7 +3,6 @@ import React, { useState, MouseEvent, FormEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import TaskToolBar from './TaskToolBar';
 import ColorMenu from './ColorMenu';
-import { ITask } from '../api';
 import '../styles/add_task_page.css';
 import MemberIcon from './MemberIcon';
 

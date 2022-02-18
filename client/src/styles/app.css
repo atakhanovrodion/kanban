@@ -1,8 +1,17 @@
 @import './colors.css';
+html {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
 body {
   margin: 0;
   font-family: Helvetica;
   user-select: none;
+  height: 100vh;
+}
+#root {
   height: 100vh;
 }
 
@@ -11,4 +20,5 @@ body {
   grid-template-rows: 34px 1fr;
   grid-gap: 7px;
   background-color: var(--main-bg-color);
+  height: 100vh;
 }

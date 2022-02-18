@@ -12,6 +12,12 @@
   width: 200px;
   box-shadow: 5px 5px 5px lightgray, -5px 5px 5px lightgray;
 }
+.header_menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .menu_board_button {
   background-color: white;
   border: 1px solid rgba(128, 128, 128, 0.445);

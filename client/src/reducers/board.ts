@@ -1,24 +1,36 @@
-import {
-	createSlice,
-	Dispatch,
-	ThunkAction,
-	AnyAction,
-	ThunkDispatch,
-} from '@reduxjs/toolkit';
+import { createSlice, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import Api from '../api';
 
 import store from '../store';
 
+interface BoardState {
+	boardName: string;
+	headers: string[];
+	members: string[];
+	currentTask: string;
+	dropColumn: string;
+	tasks: {
+		text: string;
+		header: string;
+		color: string;
+		members: string[];
+		labels: string[];
+		_id: string;
+	}[];
+}
+
+const initialState: BoardState = {
+	boardName: '',
+	headers: ['Todo', 'Done'],
+	members: [],
+	currentTask: '',
+	dropColumn: '',
+	tasks: [],
+};
+
 export const boardSlice = createSlice({
 	name: 'board',
-	initialState: {
-		boardName: '',
-		headers: ['Todo', 'Done'],
-		members: [],
-		currentTask: '',
-		dropColumn: '',
-		tasks: [],
-	},
+	initialState: initialState,
 	reducers: {
 		setHeaders: (state, action) => {
 			state.headers = action.payload;
@@ -54,6 +66,7 @@ export const selectBoardName = (state: RootState) => state.board.boardName;
 export const selectHeaders = (state: RootState) => state.board.headers;
 export const selectMembers = (state: RootState) => state.board.members;
 export const selectTasks = (state: RootState) => state.board.tasks;
+
 export { setTasks, setCurrentTask, setDropColumn };
 
 export const addBoard =
@@ -118,6 +131,26 @@ export const sendTasks =
 		try {
 			const api = new Api(getState().app.token);
 			const res = await api.setTasks(getState().app.currentBoard, tasks);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+export const updateBoard =
+	(...args: any): ThunkAction<void, RootState, unknown, AnyAction> =>
+	async (dispatch, getState) => {
+		try {
+			const api = new Api(getState().app.token);
+			await api.updateBoard(getState().app.currentBoard, ...args);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+export const removeBoard =
+	(): ThunkAction<void, RootState, unknown, AnyAction> =>
+	async (dispatch, getState) => {
+		try {
+			const api = new Api(getState().app.token);
+			await api.removeBoard(getState().app.currentBoard);
 		} catch (error) {
 			console.error(error);
 		}

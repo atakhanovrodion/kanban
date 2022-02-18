@@ -1,12 +1,6 @@
-show task properly
-
-
 app header 
-            boards 
-                    -> show boards names
-                    -> search panel
             notifications
-                            => invite logic 
+                            => notification view
                             => status change logic
                             => delecte/rename logic
             account settings
@@ -27,3 +21,5 @@ board
         -> add task properly
         -> edit task
         ->done task hisrory
+createnewboard 
+                -> can close createnewboard window

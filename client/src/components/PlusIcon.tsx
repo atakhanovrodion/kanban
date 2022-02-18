@@ -2,16 +2,14 @@ type PlusIconProps = {
 	handler: () => void;
 };
 
-const PlusIcon = ({ handler }: PlusIconProps): JSX.Element => (
+const PlusIcon = ({}: PlusIconProps): JSX.Element => (
 	<svg
 		className="member_icon"
 		viewBox="0 0 100 100"
 		width="25px"
 		height="25px"
 		fill="#fff"
-		onClick={() => {
-			handler();
-		}}
+		onClick={() => {}}
 	>
 		<circle cx="50" cy="50" r="50" />
 		<rect

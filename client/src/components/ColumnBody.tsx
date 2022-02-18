@@ -17,17 +17,7 @@ type ColumnBodyProps = {
 	filter: string[];
 };
 
-const ColumnBody = ({
-	tasks,
-	columnName,
-	onTaskDrag,
-	currentTask,
-	//	moveTask,
-	showEditTaskWindow,
-	deleteTask,
-	currentTaskColorHandler,
-	filter,
-}: ColumnBodyProps): JSX.Element => {
+const ColumnBody = ({ tasks, columnName }: ColumnBodyProps): JSX.Element => {
 	const className = `column_body`;
 	const tasksElement = tasks.map((item) => (
 		<Task
@@ -35,12 +25,7 @@ const ColumnBody = ({
 			id={item._id}
 			name={item.text}
 			color={item.color}
-			onTaskDrag={onTaskDrag}
-			showEditTaskWindow={showEditTaskWindow}
-			deleteTask={deleteTask}
 			members={item.members}
-			currentTaskColorHandler={currentTaskColorHandler}
-			filter={filter}
 		/>
 	));
 

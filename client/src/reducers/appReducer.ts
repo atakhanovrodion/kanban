@@ -7,16 +7,31 @@ import {
 import Api from '../api';
 import store from '../store';
 
+interface AppState {
+	appState: string;
+	userName: string;
+	token: string;
+	isLoading: boolean;
+	currentBoard: string;
+	usersList: [];
+	boards: [];
+	notifications: { id: string; type: string; boardId: string; from: string }[];
+}
+
+const initialState: AppState = {
+	appState: 'unlogged',
+	userName: '',
+	token: '',
+	isLoading: false,
+	currentBoard: '',
+	usersList: [],
+	boards: [],
+	notifications: [],
+};
+
 export const appSlice = createSlice({
 	name: 'app',
-	initialState: {
-		appState: 'unlogged',
-		userName: '',
-		token: '',
-		isLoading: false,
-		currentBoard: '',
-		usersList: [],
-	},
+	initialState: initialState,
 	reducers: {
 		setUserName: (state, action) => {
 			state.userName = action.payload;
@@ -36,13 +51,26 @@ export const appSlice = createSlice({
 		setUsersList: (state, action) => {
 			state.usersList = action.payload;
 		},
+		setBoards: (state, action) => {
+			state.boards = action.payload;
+		},
+		setNotifications: (state, action) => {
+			state.notifications = action.payload;
+		},
 	},
 });
+const {
+	setUserName,
+	setToken,
+	setUsersList,
+	setBoards,
+	setIsLoading,
+	setCurrentBoard,
+	setAppState,
+	setNotifications,
+} = appSlice.actions;
 
-export const { setIsLoading } = appSlice.actions;
-
-const { setUserName, setToken, setAppState, setCurrentBoard, setUsersList } =
-	appSlice.actions;
+export { setIsLoading, setCurrentBoard, setAppState };
 
 export const login =
 	(userName: string, password: string) => async (dispatch: Dispatch) => {
@@ -68,7 +96,7 @@ export const register =
 		userName: string,
 		password: string
 	): ThunkAction<void, RootState, unknown, AnyAction> =>
-	async (dispatch, getState) => {
+	async (dispatch) => {
 		try {
 			dispatch(setIsLoading(true));
 			const api = new Api();
@@ -92,11 +120,8 @@ export const getBoards =
 		try {
 			const api = new Api(getState().app.token);
 			const res = await api.getBoards();
-			if (res.length > 0) {
-				dispatch(setCurrentBoard(res[0]));
-				dispatch(setAppState('logged'));
-			} else {
-				dispatch(setAppState('creating'));
+			if (getState().app.appState === 'logged') {
+				dispatch(setBoards(res));
 			}
 		} catch (err) {
 			console.error(err);
@@ -108,7 +133,8 @@ export const getUser =
 		try {
 			dispatch(setIsLoading(true));
 			const api = new Api();
-			const { userName, boards } = await api.getUser();
+			const { userName, boards, notifications } = await api.getUser();
+			dispatch(setNotifications(notifications));
 			dispatch(setToken(api.token));
 			dispatch(setUserName(userName));
 			if (boards.length > 0) {
@@ -154,12 +180,34 @@ export const getUsers =
 			console.error(err);
 		}
 	};
+export const notificationHandle =
+	(
+		response: string,
+		notificationId: string
+	): ThunkAction<void, RootState, unknown, AnyAction> =>
+	async (dispatch, getState) => {
+		try {
+			const api = new Api(getState().app.token);
+			if (response === 'accept') {
+				await api.accept(notificationId);
+			} else {
+				await api.decline(notificationId);
+			}
+			const res = await api.getUser();
+			dispatch(setNotifications(res.notifications));
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 export const selectAppState = (state: RootState) => state.app.appState;
 export const selectUserName = (state: RootState) => state.app.userName;
 
+export const selectNotifications = (state: RootState) =>
+	state.app.notifications;
 export const selectCurrentBoard = (state: RootState) => state.app.currentBoard;
 
+export const selectBoards = (state: RootState) => state.app.boards;
 export const selectUsersList = (state: RootState) => state.app.usersList;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
